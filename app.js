@@ -1,6 +1,6 @@
 const Koa = require('koa');
 const app = new Koa;
-const config = require('./config');
+const config = require('./config/config');
 const router = require('./router');
 
 app.on('error', function(err, ctx){

@@ -3,9 +3,9 @@ const fs = require('fs');
 let configpath = '';
 
 if (process.env.NODE_ENV === 'pro') {
-    configpath = './config/pro.yaml'
+    configpath = './config/pro.yaml';
 } else if (process.env.NODE_ENV === 'test') {
-    configpath = './config/test.yaml'
+    configpath = './config/test.yaml';
 } else {
     configpath = './config/dev.yaml';
 }
