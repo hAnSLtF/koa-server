@@ -1,15 +1,13 @@
-const views = require('koa-views');
-const path = require('path');
-
 class index {
     async index(ctx) {
         console.log(ctx);
-        console.log(this);
-        console.log(views);
-        let title = '1';
-        ctx.render('index', {
+        let title = 'index';
+
+        let body = await ctx.render('index', {
             title
         });
+        ctx.type = 'text/html';
+        ctx.body = '<h1>hello</h1>';
     }
 }
 

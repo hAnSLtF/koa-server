@@ -1,15 +1,9 @@
 const yaml = require('js-yaml');
 const fs = require('fs');
-let configpath = '';
+let configpath = './config/development.yaml';
 
-if (process.env.NODE_ENV === 'pro') {
-    configpath = './config/pro.yaml';
-} else if (process.env.NODE_ENV === 'test') {
-    configpath = './config/test.yaml';
-} else {
-    configpath = './config/dev.yaml';
+if (process.env.NODE_ENV === 'production') {
+    configpath = './config/production.yaml';
 }
-
-console.log(process.env.NODE_ENV);
 
 module.exports = yaml.load(fs.readFileSync(configpath));
