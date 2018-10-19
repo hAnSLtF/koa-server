@@ -1,14 +1,11 @@
-class index {
-    async index(ctx) {
-        console.log(ctx);
-        let title = 'index';
-
-        let body = await ctx.render('index', {
-            title
-        });
-        ctx.type = 'text/html';
-        ctx.body = '<h1>hello</h1>';
-    }
+let index = async (ctx, next) => {
+    // let title = 'index';
+    await ctx.render('index', {
+        title: 111
+    });
+    // ctx.response.body = '<h1>this is index!</h1>';
 }
 
-module.exports = new index();
+module.exports = {
+    'GET ': index
+};
