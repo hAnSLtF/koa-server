@@ -5,7 +5,7 @@ function addController(router, dir) {
     //过滤出js文件
     let jsFiles = files.filter((f) => {
         return f.endsWith('.js');
-    })
+    });
 
     for (let f of jsFiles) {
         console.log(`process controller ${f}...`);
@@ -29,7 +29,7 @@ function addController(router, dir) {
 
 module.exports = function(dir) {
     let controllerDir = dir || 'controller';
-    router = require('koa-router')();
+    let router = require('koa-router')();
     addController(router, controllerDir);
     return router.routes();
-}
+};

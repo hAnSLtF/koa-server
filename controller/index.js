@@ -1,11 +1,13 @@
-let index = async (ctx, next) => {
-    // let title = 'index';
-    await ctx.render('index', {
-        title: 111
+let index = async(ctx, next) => {
+    Object.assign(ctx.state, {
+        file: 'index',
+        headTitle: 'index',
+        needVue: 'false'
     });
-    // ctx.response.body = '<h1>this is index!</h1>';
-}
+    await ctx.render('index/index', {
+    });
+};
 
 module.exports = {
-    'GET ': index
+    'GET /': index
 };

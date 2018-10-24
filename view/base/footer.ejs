@@ -1,0 +1,10 @@
+
+<% if (needVue && isProduction) { %>
+    <script src="../../static/common/js/vue.min.js"></script>
+<% } else if (needVue && !isProduction) { %>
+    <script src="../../static/common/js/vue.js"></script>
+<% } %>
+
+<script src="../../static/src/cdp/<%= file %>.js"></script>
+</body>
+</html>
