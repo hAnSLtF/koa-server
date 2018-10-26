@@ -21,6 +21,7 @@ body {
     margin: 0;
     font-family: "PingFangSC-Regular", "Microsoft Yahei", "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
+    color: #333;
     scroll-behavior: smooth;
 }
 
@@ -445,4 +446,11 @@ menu,
 dir {
     margin: 0;
     padding: 0;
+}
+
+/**
+ * Vue
+ */
+[v-cloak] {
+    display: none;
 }

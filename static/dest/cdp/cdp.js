@@ -1,0 +1,1 @@
+new Vue({el:"#Cdp",data:{navList:[{name:"所有项目",active:!0},{name:"我的发布",active:!1},{name:"使用帮助",active:!1}],isLogin:!1,logInfo:{name:"登陆",id:0},onlyme:{checked:!1}}});

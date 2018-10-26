@@ -1,7 +1,71 @@
 <%- include('../base/header'); %>
 
-<div id="Cdp">
-    <div>{{ a }}</div>
+<div id="Cdp" v-cloak>
+
+    <!-- nav导航 -->
+    <nav class="head-nav">
+        <div class="cdp-logo"></div>
+        <ul class="nav-list">
+            <li class="nav-item" v-for="item in navList" v-bind:class="{ active: item.active }">{{ item.name }}</li>
+        </ul>
+        <div class="login">
+            <span class="login-name">{{logInfo.name}}</span>
+            <div class="logout tip" v-if="isLogin">登出</div>
+        </div>
+    </nav>
+
+    <div class="card-box">
+        <!-- 控制模块 -->
+        <div class="control card">
+            <div class="ctr-bar-wrapper">
+                <ul class="ctr-bar">
+                    <li class="ctr-bar-item">全部</li>
+                    <li class="ctr-bar-item active"><i class="icon-sketch"></i>Sketch</li>
+                    <li class="ctr-bar-item"><i class="icon-axure"></i>Axure</li>
+                </ul>
+            </div>
+            <div class="ctr-input-wrapper">
+                <label class="input-wrapper program">
+                    <span class="input-name">项目</span>
+                    <input type="text" name="" id="" placeholder="输入项目名/备注">
+                </label>
+                <label class="input-wrapper">
+                    <span class="input-name">发布人</span>
+                    <input type="text" name="" id="" placeholder="请输入发布人">
+                </label>
+                <label class="checkbox-wrapper onlyme" v-bind:class="{ checked: onlyme.checked }">
+                    <span class="checkbox-inner"></span>
+                    <input type="checkbox" v-model="onlyme.checked">
+                    <span class="checkbox-name">只看我的</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 文件列表主体-->
+        <div class="content card">
+            <div class="content-hint">温馨提示：2017年09月14日以前的发布记录请前往旧版页面</div>
+            <div class="cdp-table">
+                <table>
+                    <colgroup>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>1</th>
+                            <th>2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 <%- include('../base/footer'); %>

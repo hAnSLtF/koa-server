@@ -32,23 +32,39 @@ let errorHandeler = function(e) {
 
 //less编译
 gulp.task('less', () => {
-    return gulp.src(['app/src/**/*.less', '!{build, node_modules}/**'])
+    return gulp.src(['static/src/**/*.less', '!{build, node_modules}/**'])
+        .pipe(sourcemaps.init())
         .pipe(less())
         .on('error', errorHandeler)
-        .pipe(gulp.dest('app/dest/'));
+        .pipe(autoprefixer({
+            browsers: ['> 1%', 'last 2 versions', 'not ie < 8'],
+            cascade: false, //是否美化属性值 默认：true 像这样：
+            //-webkit-transform: rotate(45deg);
+            //        transform: rotate(45deg);
+            remove: true //是否去掉不必要的前缀 默认：true
+        }))
+        .pipe(cleanCSS({
+            advanced: false, //类型：Boolean 默认：true [是否开启高级优化（合并选择器等）]
+            //compatibility: 'ie7',//保留ie7及以下兼容写法 类型：String 默认：''or'*' [启用兼容模式； 'ie7'：IE7兼容模式，'ie8'：IE8兼容模式，'*'：IE9+兼容模式]
+            keepBreaks: false, //类型：Boolean 默认：false [是否保留换行]
+            keepSpecialComments: '1'
+            //保留所有特殊前缀 当你用autoprefixer生成的浏览器前缀，如果不加这个参数，有可能将会删除你的部分前缀
+        }))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('static/dest/'));
 });
 
 //scss编译
 gulp.task('scss', () => {
-    return gulp.src(['app/src/**/!(_*).scss', '!{build, node_modules}/**'])
+    return gulp.src(['static/src/**/!(_*).scss', '!{build, node_modules}/**'])
         .pipe(scss())
         .on('error', errorHandeler)
-        .pipe(gulp.dest('app/dest/'));
+        .pipe(gulp.dest('static/dest/'));
 });
 
 //修正浏览器前缀
 gulp.task('autofix', () => {
-    return gulp.src('app/dest/**/!(_*).css')
+    return gulp.src('static/dest/**/!(_*).css')
         .pipe(sourcemaps.init())
         .pipe(autoprefixer({
             browsers: ['> 1%', 'last 2 versions', 'not ie < 8'],
@@ -58,12 +74,12 @@ gulp.task('autofix', () => {
             remove: true //是否去掉不必要的前缀 默认：true
         }))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('app/dest/'));
+        .pipe(gulp.dest('static/dest/'));
 });
 
 //压缩css
 gulp.task('cssmin', () => {
-    return gulp.src('app/dest/**/!(_*).css')
+    return gulp.src('static/dest/**/!(_*).css')
         .pipe(cleanCSS({
             advanced: false, //类型：Boolean 默认：true [是否开启高级优化（合并选择器等）]
             //compatibility: 'ie7',//保留ie7及以下兼容写法 类型：String 默认：''or'*' [启用兼容模式； 'ie7'：IE7兼容模式，'ie8'：IE8兼容模式，'*'：IE9+兼容模式]
@@ -71,7 +87,7 @@ gulp.task('cssmin', () => {
             keepSpecialComments: '1'
             //保留所有特殊前缀 当你用autoprefixer生成的浏览器前缀，如果不加这个参数，有可能将会删除你的部分前缀
         }))
-        .pipe(gulp.dest('app/dest/'));
+        .pipe(gulp.dest('static/dest/'));
 });
 
 //压缩html
@@ -86,14 +102,14 @@ gulp.task('htmlmin', () => {
         minifyJS: true, //压缩页面JS
         minifyCSS: true //压缩页面CSS
     };
-    return gulp.src(['app/dest/**/!(_*).html', '!{build, node_modules}/**'])
+    return gulp.src(['static/dest/**/!(_*).html', '!{build, node_modules}/**'])
         .pipe(htmlmin(options))
-        .pipe(gulp.dest('app/dest/'));
+        .pipe(gulp.dest('static/dest/'));
 });
 
 //压缩js
 gulp.task('jsmin', function() {
-    return gulp.src(['app/src/**/!(_*).js', '!{build, node_modules}/**'])
+    return gulp.src(['static/src/**/!(_*).js', '!{build, node_modules}/**'])
         .pipe(uglify({
             mangle: false, //类型：Boolean 默认：true 是否修改变量名
             compress: true //类型：Boolean 默认：true 是否完全压缩
@@ -103,25 +119,25 @@ gulp.task('jsmin', function() {
             console.log(JSON.stringify(e));
             this.emit('end');
         })
-        .pipe(gulp.dest('app/dest/'));
+        .pipe(gulp.dest('static/dest/'));
 });
 
 //压缩图片
 gulp.task('imagemin', function() {
-    return gulp.src('app/src/**/*.{png, jpg, gif ,ico}')
+    return gulp.src('static/src/**/*.{png, jpg, gif ,ico}')
         .pipe(imagemin({
             progressive: true,
             svgoPlugins: [{ removeViewBox: false }], //不要移除svg的viewbox属性
             use: [pngquant()] //使用pngquant深度压缩png图片的imagemin插件
         }))
-        .pipe(gulp.dest('app/dest/'));
+        .pipe(gulp.dest('static/dest/'));
 });
 
 
 gulp.task('browser-sync', () => {
     browserSync.init({
         server: {
-            baseDir: './app/',
+            baseDir: './static/',
             middleware: [
                 function(req, res, next) {
                     console.log('refresh');
@@ -139,7 +155,7 @@ gulp.task('browser-sync', () => {
 gulp.task('serve', () => {
     browserSync.init({
         server: {
-            baseDir: './app/',
+            baseDir: './static/',
             middleware: [
                 function(req, res, next) {
                     console.log('refresh');
@@ -152,12 +168,12 @@ gulp.task('serve', () => {
         logFileChanges: true,
         logLevel: 'info'
     });
-    gulp.watch(['app/dest/**/*.*']).on('change', reload);
-    gulp.watch(['app/src/**/!(_*).html'], gulp.series(['htmlmin']));
-    gulp.watch(['app/src/**/*.jp(e?)g', 'app/src/**/*.gif', 'app/src/**/*.png'], gulp.series(['imagemin']));
-    gulp.watch(['app/src/**/!(_*).scss'], gulp.series(['scss', 'autofix', 'cssmin']));
-    gulp.watch(['app/src/**/*.less'], gulp.series(['less', 'autofix', 'cssmin']));
-    gulp.watch(['app/src/**/!(_*).js', '!{build, node_modules}/**'], gulp.series(['jsmin']));
+    gulp.watch(['static/dest/**/*.*']).on('change', reload);
+    gulp.watch(['static/src/**/!(_*).html'], gulp.series(['htmlmin']));
+    gulp.watch(['static/src/**/*.jp(e?)g', 'static/src/**/*.gif', 'static/src/**/*.png'], gulp.series(['imagemin']));
+    gulp.watch(['static/src/**/!(_*).scss'], gulp.series(['scss', 'cssmin', 'autofix']));
+    gulp.watch(['static/src/**/*.less'], gulp.series(['less']));
+    gulp.watch(['static/src/**/!(_*).js', '!{build, node_modules}/**'], gulp.series(['jsmin']));
 });
 
 gulp.task('default', gulp.series(['serve']));
