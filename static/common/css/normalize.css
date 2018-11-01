@@ -11,6 +11,7 @@ html {
     -ms-text-size-adjust: 100%; /* 2 */
     -webkit-text-size-adjust: 100%; /* 2 */
     scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /**
@@ -22,7 +23,6 @@ body {
     font-family: "PingFangSC-Regular", "Microsoft Yahei", "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     color: #333;
-    scroll-behavior: smooth;
 }
 
 /* HTML5 display definitions

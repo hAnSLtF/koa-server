@@ -6,7 +6,7 @@
     <nav class="head-nav">
         <div class="cdp-logo"></div>
         <ul class="nav-list">
-            <li class="nav-item" v-for="item in navList" v-bind:class="{ active: item.active }">{{ item.name }}</li>
+            <li class="nav-item" v-for="item in navList" :class="{ active: item.active }">{{ item.name }}</li>
         </ul>
         <div class="login">
             <span class="login-name">{{logInfo.name}}</span>
@@ -27,13 +27,13 @@
             <div class="ctr-input-wrapper">
                 <label class="input-wrapper program">
                     <span class="input-name">项目</span>
-                    <input type="text" name="" id="" placeholder="输入项目名/备注">
+                    <input type="text" id="" placeholder="输入项目名/备注">
                 </label>
                 <label class="input-wrapper">
                     <span class="input-name">发布人</span>
-                    <input type="text" name="" id="" placeholder="请输入发布人">
+                    <input type="text" id="" placeholder="请输入发布人">
                 </label>
-                <label class="checkbox-wrapper onlyme" v-bind:class="{ checked: onlyme.checked }">
+                <label class="checkbox-wrapper onlyme" :class="{ checked: onlyme.checked }">
                     <span class="checkbox-inner"></span>
                     <input type="checkbox" v-model="onlyme.checked">
                     <span class="checkbox-name">只看我的</span>
@@ -44,27 +44,40 @@
         <!-- 文件列表主体-->
         <div class="content card">
             <div class="content-hint">温馨提示：2017年09月14日以前的发布记录请前往旧版页面</div>
-            <div class="cdp-table">
-                <table>
-                    <colgroup>
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>1</th>
-                            <th>2</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="cdp-table-wrapper">
+                <div class="cdp-table">
+                    <div class="cdp-table-header">
+                        <table>
+                            <colgroup>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>1</th>
+                                    <th>2</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="cdp-table-body">
+                        <table>
+                            <colgroup>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <footer class="footer">
+        <p>有任何意见或建议，请联系<a href="mailto:CDPService@Ctrip.com">CDPService@Ctrip.com</a></p>
+    </footer>
 
 </div>
 
