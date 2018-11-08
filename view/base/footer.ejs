@@ -1,10 +1,17 @@
 
 <% if (needVue && isProduction) { %>
     <script src="../../static/common/js/vue.min.js"></script>
+    <script src="../../static/common/js/axios.min.js"></script>
 <% } else if (needVue && !isProduction) { %>
     <script src="../../static/common/js/vue.js"></script>
+    <script src="../../static/common/js/axios.min.js"></script>
 <% } %>
 
-<script src="../../static/src/<%= file %>/<%= file %>.js"></script>
+<% if (isProduction) { %>
+    <script src="../../static/dest/<%= file %>/<%= file %>.js"></script>
+<% } else { %>
+    <script src="../../static/src/<%= file %>/<%= file %>.js"></script>
+<% } %>
+
 </body>
 </html>

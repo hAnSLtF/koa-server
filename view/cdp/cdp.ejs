@@ -6,11 +6,11 @@
     <nav class="head-nav">
         <div class="cdp-logo"></div>
         <ul class="nav-list">
-            <li class="nav-item" v-for="item in navList" :class="{ active: item.active }">{{ item.name }}</li>
+            <li class="nav-item" v-for="item of navList" :class="{ active: item.active }" @click="navClick(item)">{{ item.name }}</li>
         </ul>
         <div class="login">
-            <span class="login-name">{{logInfo.name}}</span>
-            <div class="logout tip" v-if="isLogin">登出</div>
+            <span class="login-name">{{user.name}}</span>
+            <div class="logout tip" v-show="user.login">登出</div>
         </div>
     </nav>
 
@@ -19,9 +19,11 @@
         <div class="control card">
             <div class="ctr-bar-wrapper">
                 <ul class="ctr-bar">
-                    <li class="ctr-bar-item">全部</li>
-                    <li class="ctr-bar-item active"><i class="icon-sketch"></i>Sketch</li>
-                    <li class="ctr-bar-item"><i class="icon-axure"></i>Axure</li>
+                    <li class="ctr-bar-item" v-for="(item, index) of ctrlist" :class="{ active: item.active }" @click="ctrClick(item)">
+                        <i class="icon-sketch" v-if="index === 1"></i>
+                        <i class="icon-axure" v-if="index === 2"></i>
+                        {{item.name}}
+                    </li>
                 </ul>
             </div>
             <div class="ctr-input-wrapper">
@@ -39,9 +41,16 @@
                     <span class="checkbox-name">只看我的</span>
                 </label>
             </div>
+            <div class="ctr-history-wrapper">
+                <div class="ctr-history-name">搜索历史：</div>
+                <div class="ctr-history-content">
+                    <span>云呼叫</span>
+                </div>
+                <button class="button">清除历史</button>
+            </div>
         </div>
 
-        <!-- 文件列表主体-->
+        <!-- 文件列表主体 -->
         <div class="content card">
             <div class="content-hint">温馨提示：2017年09月14日以前的发布记录请前往旧版页面</div>
             <div class="cdp-table-wrapper">
@@ -52,8 +61,13 @@
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th>1</th>
-                                    <th>2</th>
+                                    <th v-for="item of projects.header">
+                                        <div class="cdp-table-cell">
+                                            <span>{{item.title}}</span>
+                                            <i class="icon-filter" v-if="item.filter"></i>
+                                            <i class="icon-sort" v-if="item.sort"></i>
+                                        </div>
+                                    </th>
                                 </tr>
                             </thead>
                         </table>
@@ -71,6 +85,13 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="local-path">
+                <label class="input-wrapper">
+                    <span class="input-name">本地路径</span>
+                    <input type="text" id="" placeholder="选择路径">
+                </label>
+                <button class="submit">更改</button>
             </div>
         </div>
     </div>

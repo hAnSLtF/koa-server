@@ -2,10 +2,10 @@ const Koa = require('koa');
 const app = new Koa();
 const bodyParse = require('koa-bodyparser');
 const controller = require('./controller');
+const proxy = require('./proxy');
 const config = require('./config');
 const isProduction = process.env.NODE_ENV === 'production';
 const views = require('koa-views');
-
 
 //公共变量
 app.use(async(ctx, next) => {
@@ -48,10 +48,20 @@ app.on('error', (err, ctx) => {
     }
 });
 
+app.use(controller());
+
+// const proxy = require('koa-proxy');
+// //http://10.5.108.14:80
+// app.use(proxy({
+//     host: 'http://10.5.108.14:80', // proxy alicdn.com...
+//     match: /^\/api\//,
+//     jar: true
+// }));
+
+app.use(proxy());
+
 //处理post
 app.use(bodyParse());
-
-app.use(controller());
 
 app.listen(config.port, () => {
     console.log('start koa at localhost:' + config.port);
