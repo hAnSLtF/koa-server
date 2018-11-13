@@ -97,6 +97,7 @@
                 }).then(function(res) {
                     if (res && res.data.results.length) {
                         console.log(1);
+                        that.projects.body = res.data.results;
                     }
                 }).catch(function(err) {
                     console.log(err);

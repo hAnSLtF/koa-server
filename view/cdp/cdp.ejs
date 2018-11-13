@@ -1,6 +1,6 @@
 <%- include('../base/header'); %>
 
-<div id="Cdp" v-cloak>
+<div id="Cdp" class="cdp" v-cloak>
 
     <!-- nav导航 -->
     <nav class="head-nav">
@@ -62,7 +62,7 @@
                             <thead>
                                 <tr>
                                     <th v-for="item of projects.header">
-                                        <div class="cdp-table-cell">
+                                        <div class="cdp-table-cell" :class="{ click: (item.filter || item.sort) }">
                                             <span>{{item.title}}</span>
                                             <i class="icon-filter" v-if="item.filter"></i>
                                             <i class="icon-sort" v-if="item.sort"></i>
@@ -77,9 +77,13 @@
                             <colgroup>
                             </colgroup>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>2</td>
+                                <tr v-for="item of projects.body">
+                                    <td><div class="cdp-table-cell">{{item.project_name}}</div></td>
+                                    <td><div class="cdp-table-cell">{{item.description}}</div></td>
+                                    <td><div class="cdp-table-cell">{{item.org_name}}</div></td>
+                                    <td><div class="cdp-table-cell">{{item.project_type}}</div></td>
+                                    <td><div class="cdp-table-cell">{{item.update_time}}</div></td>
+                                    <td><div class="cdp-table-cell">{{item.creator}}</div></td>
                                 </tr>
                             </tbody>
                         </table>
