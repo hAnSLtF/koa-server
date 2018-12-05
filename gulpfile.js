@@ -153,21 +153,6 @@ gulp.task('browser-sync', () => {
 });
 
 gulp.task('serve', () => {
-    browserSync.init({
-        server: {
-            baseDir: './static/',
-            middleware: [
-                function(req, res, next) {
-                    console.log('refresh');
-                    next();
-                }
-            ]
-        },
-        port: 3080,
-        logPrefix: 'test',
-        logFileChanges: true,
-        logLevel: 'info'
-    });
     gulp.watch(['static/dest/**/*.*']).on('change', reload);
     gulp.watch(['static/src/**/!(_*).html'], gulp.series(['htmlmin']));
     gulp.watch(['static/src/**/*.jp(e?)g', 'static/src/**/*.gif', 'static/src/**/*.png'], gulp.series(['imagemin']));

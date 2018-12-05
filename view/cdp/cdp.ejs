@@ -6,7 +6,7 @@
     <nav class="head-nav">
         <div class="cdp-logo"></div>
         <ul class="nav-list">
-            <li class="nav-item" v-for="item of navList" :class="{ active: item.active }" @click="navClick(item)">{{ item.name }}</li>
+            <li class="nav-item" v-for="item, index of navList" :class="{ active: item.active }" @click="navClick(item, index)">{{ item.name }}</li>
         </ul>
         <div class="login">
             <span class="login-name">{{user.name}}</span>
@@ -29,35 +29,36 @@
             <div class="ctr-input-wrapper">
                 <label class="input-wrapper program">
                     <span class="input-name">项目</span>
-                    <input type="text" id="" placeholder="输入项目名/备注">
+                    <input type="text" id="" placeholder="输入项目名/备注" v-model="search.name" @keyup.enter="searchProject">
                 </label>
-                <label class="input-wrapper">
+                <label class="input-wrapper" :class="{ disabled: search.onlyme }" v-if="search.currentNav === 0">
                     <span class="input-name">发布人</span>
-                    <input type="text" id="" placeholder="请输入发布人">
+                    <input type="text" id="" placeholder="请输入发布人" v-model="search.creator" @keyup.enter="searchProject">
                 </label>
-                <label class="checkbox-wrapper onlyme" :class="{ checked: onlyme.checked }">
+                <label class="checkbox-wrapper onlyme" :class="{ checked: search.onlyme }" v-if="search.currentNav === 0">
                     <span class="checkbox-inner"></span>
-                    <input type="checkbox" v-model="onlyme.checked">
+                    <input type="checkbox" v-model="search.onlyme" @click="searchProject">
                     <span class="checkbox-name">只看我的</span>
                 </label>
             </div>
             <div class="ctr-history-wrapper">
                 <div class="ctr-history-name">搜索历史：</div>
                 <div class="ctr-history-content">
-                    <span>云呼叫</span>
+                    <span v-for="item of search.history">{{item}}</span>
                 </div>
-                <button class="button">清除历史</button>
+                <button class="button" @click="clearHistory">清除历史</button>
             </div>
         </div>
 
         <!-- 文件列表主体 -->
         <div class="content card">
-            <div class="content-hint">温馨提示：2017年09月14日以前的发布记录请前往旧版页面</div>
+            <div class="content-hint" v-if="search.currentNav === 0">温馨提示：2017年09月14日以前的发布记录请前往旧版页面</div>
             <div class="cdp-table-wrapper">
                 <div class="cdp-table">
-                    <div class="cdp-table-header">
+                    <div class="cdp-table-header" v-if="search.currentNav === 0">
                         <table>
                             <colgroup>
+                                <col v-for="item of projects.header" :width="item.width"></col>
                             </colgroup>
                             <thead>
                                 <tr>
@@ -72,25 +73,56 @@
                             </thead>
                         </table>
                     </div>
-                    <div class="cdp-table-body">
+                    <div class="cdp-table-header" v-if="search.currentNav === 1">
                         <table>
                             <colgroup>
+                                <col v-for="item of projects.headerMy" :width="item.width"></col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th v-for="item of projects.headerMy">
+                                        <div class="cdp-table-cell" :class="{ click: (item.filter || item.sort) }">
+                                            <span>{{item.title}}</span>
+                                            <i class="icon-filter" v-if="item.filter"></i>
+                                            <i class="icon-sort" v-if="item.sort"></i>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="cdp-table-body">
+                        <table>
+                            <colgroup v-if="search.currentNav === 0">
+                                <col v-for="item of projects.header" :width="item.width"></col>
+                            </colgroup>
+                            <colgroup v-if="search.currentNav === 1">
+                                <col v-for="item of projects.headerMy" :width="item.width"></col>
                             </colgroup>
                             <tbody>
-                                <tr v-for="item of projects.body">
-                                    <td><div class="cdp-table-cell">{{item.project_name}}</div></td>
-                                    <td><div class="cdp-table-cell">{{item.description}}</div></td>
-                                    <td><div class="cdp-table-cell">{{item.org_name}}</div></td>
-                                    <td><div class="cdp-table-cell">{{item.project_type}}</div></td>
-                                    <td><div class="cdp-table-cell">{{item.update_time}}</div></td>
-                                    <td><div class="cdp-table-cell">{{item.creator}}</div></td>
+                                <tr v-for="item of projects.body" @click="projectClick(item)">
+                                    <td><div class="cdp-table-cell" :title="item.project_name">{{item.project_name}}<i class="icon-lock" v-if="item.status == 'Failed'"></i></div></td>
+                                    <td><div class="cdp-table-cell" :title="item.description">{{item.description}}</div></td>
+                                    <td v-if="search.currentNav === 0"><div class="cdp-table-cell" :title="item.org_name">{{item.org_name}}</div></td>
+                                    <td><div class="cdp-table-cell" :title="item.project_type">{{item.project_type}}</div></td>
+                                    <td><div class="cdp-table-cell" :title="item.update_time">{{item.update_time}}</div></td>
+                                    <td v-if="search.currentNav === 0"><div class="cdp-table-cell" :title="item.creator">{{item.creator}}</div></td>
+                                    <td v-if="search.currentNav === 1">
+                                        <div class="cdp-table-cell cdp-table-ctr">
+                                            <span>发布</span>
+                                            <span>服务器删除</span>
+                                            <span class="cdp-table-ctr-main">···
+                                                <span class="local-ctr tip"><span>本地浏览</span><span>本地删除</span></span>
+                                            </span>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <div class="local-path">
+            <div class="local-path" v-if="search.currentNav === 1">
                 <label class="input-wrapper">
                     <span class="input-name">本地路径</span>
                     <input type="text" id="" placeholder="选择路径">

@@ -48,6 +48,9 @@ app.on('error', (err, ctx) => {
     }
 });
 
+//处理post
+app.use(bodyParse());
+
 app.use(controller());
 
 // const proxy = require('koa-proxy');
@@ -60,8 +63,6 @@ app.use(controller());
 
 app.use(proxy());
 
-//处理post
-app.use(bodyParse());
 
 app.listen(config.port, () => {
     console.log('start koa at localhost:' + config.port);
